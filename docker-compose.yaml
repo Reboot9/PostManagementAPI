@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14.1-alpine
+    restart: unless-stopped
+    env_file:
+      - ./.env
+#    environment:
+#      - POSTGRES_DB=${DB_NAME}
+#      - POSTGRES_USER=${DB_USER}
+#      - POSTGRES_PASSWORD=${DB_PASSWORD}
+#      - PGPORT=${DB_PORT}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - post_management_network
+
+  web:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    volumes:
+      - .:/PostManagementAPI
+      - static_volume:/PostManagementAPI/static
+      - media_volume:/PostManagementAPI/media
+    expose:
+      - 8000
+    networks:
+      - post_management_network
+    depends_on:
+      - db
+
+  nginx:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: config/nginx/Dockerfile
+    volumes:
+      - static_volume:/PostManagementAPI/static
+      - media_volume:/PostManagementAPI/media
+    ports:
+      - "80:80"
+    networks:
+      - post_management_network
+    depends_on:
+      - web
+
+volumes:
+  static_volume:
+  media_volume:
+  postgres_data:
+
+networks:
+  post_management_network:
+    driver: bridge
