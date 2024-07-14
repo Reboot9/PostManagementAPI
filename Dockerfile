@@ -26,8 +26,6 @@ COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/pytho
 COPY --from=builder /builder /PostManagementAPI
 COPY --from=builder /usr/local/bin/gunicorn /usr/local/bin/gunicorn
 
-# EXPOSE 8000
-
 COPY wait-for-it.sh ./
 COPY docker-entrypoint.sh ./
 
