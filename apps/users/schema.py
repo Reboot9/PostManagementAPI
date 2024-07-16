@@ -24,11 +24,14 @@ class TokenSchema(Schema):
     access_token: str
     refresh_token: str
 
+
 class RefreshTokenSchema(Schema):
     refresh_token: str
 
+
 class AccessTokenSchema(Schema):
     access_token: str
+
 
 class ErrorSchema(Schema):
     message: str
