@@ -163,3 +163,9 @@ LOGGING = {
         },
     },
 }
+
+# JWT Auth settings
+SECRET_KEY = "test_secret_key"
+REFRESH_TOKEN_SECRET_KEY = "test_refresh_token_secret_key"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
+REFRESH_TOKEN_EXPIRE_DAYS = 30
