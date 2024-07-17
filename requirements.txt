@@ -4,6 +4,8 @@ cffi==1.16.0
 contextlib2==21.6.0
 cryptography==42.0.8
 Django==5.0.7
+django-ckeditor==6.7.1
+django-js-asset==2.2.0
 django-ninja==1.2.1
 dnspython==2.6.1
 email_validator==2.2.0

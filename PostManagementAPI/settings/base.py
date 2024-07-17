@@ -47,11 +47,12 @@ DJANGO_APPS = [
 # Specific apps for the project.
 LOCAL_APPS = [
     "apps.users.apps.UsersConfig",
+    "apps.posts.apps.PostsConfig",
 ]
 
 # External packages or libraries.
 THIRD_PARTY_APPS = [
-
+    "ckeditor",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
