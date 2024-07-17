@@ -4,7 +4,8 @@ from django.contrib.auth import get_user_model, authenticate, password_validatio
 from django.core.exceptions import ValidationError
 from ninja import Router
 
-from apps.users.schema import UserRegistrationSchema, UserOutSchema, ErrorSchema, UserLoginSchema, TokenSchema, \
+from PostManagementAPI.schemas.errors import ErrorSchema
+from apps.users.schema import UserRegistrationSchema, UserOutSchema, UserLoginSchema, TokenSchema, \
     RefreshTokenSchema, AccessTokenSchema
 from apps.users.utils import generate_access_token, generate_refresh_token
 
@@ -20,6 +21,12 @@ def register_user(request, data_in: UserRegistrationSchema):
     try:
         # Validate passwords
         password_validation.validate_password(data_in.password1)
+
+        if User.objects.filter(email=data_in.email).exists():
+            return 400, {"message": "Email already registered"}
+
+        if User.objects.get(email=data_in.username).exists():
+            return 400, {"message": "Username already registered"}
 
         # Create user instance
         user = User.objects.create_user(

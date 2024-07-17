@@ -1,4 +1,4 @@
-from ninja import NinjaAPI, Schema
+from ninja import Schema
 from pydantic import EmailStr
 
 
@@ -31,7 +31,3 @@ class RefreshTokenSchema(Schema):
 
 class AccessTokenSchema(Schema):
     access_token: str
-
-
-class ErrorSchema(Schema):
-    message: str
