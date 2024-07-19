@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from ninja import Schema
 
 
@@ -12,3 +14,4 @@ class PostOutSchema(Schema):
     content: str
     author_id: int
     is_blocked: bool
+    created_at: datetime
