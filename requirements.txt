@@ -1,3 +1,4 @@
+alt-profanity-check==1.5.0
 annotated-types==0.7.0
 asgiref==3.8.1
 cffi==1.16.0
@@ -12,6 +13,8 @@ email_validator==2.2.0
 gunicorn==22.0.0
 idna==3.7
 injector==0.22.0
+joblib==1.4.2
+numpy==2.0.0
 packaging==24.1
 psycopg2-binary==2.9.9
 pycparser==2.22
@@ -19,5 +22,8 @@ pydantic==2.8.2
 pydantic_core==2.20.1
 PyJWT==2.8.0
 python-dotenv==1.0.1
+scikit-learn==1.5.0
+scipy==1.14.0
 sqlparse==0.5.0
+threadpoolctl==3.5.0
 typing_extensions==4.12.2
