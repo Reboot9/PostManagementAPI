@@ -25,7 +25,7 @@ def register_user(request, data_in: UserRegistrationSchema):
         if User.objects.filter(email=data_in.email).exists():
             return 400, {"message": "Email already registered"}
 
-        if User.objects.get(email=data_in.username).exists():
+        if User.objects.filter(username=data_in.username).exists():
             return 400, {"message": "Username already registered"}
 
         # Create user instance
