@@ -1,13 +1,14 @@
+from datetime import datetime, date
 from typing import List
 
 from django.contrib.auth import get_user_model
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404
 from ninja import Router
-from ninja.pagination import paginate, PageNumberPagination
 
 from PostManagementAPI.schemas.errors import ErrorSchema
 from apps.comments.models import Comment
-from apps.comments.schema import CommentInSchema, CommentOutSchema, ReplySchema
+from apps.comments.schema import CommentInSchema, CommentOutSchema, ReplySchema, CommentAnalyticsSchema
 from apps.posts.models import Post
 from apps.users.auth import JWTBearer
 
@@ -15,6 +16,36 @@ router = Router()
 
 User = get_user_model()
 
+
+@router.get("/comments-daily-breakdown", response={200: List[CommentAnalyticsSchema], 400: ErrorSchema})
+def daily_breakdown(request, date_from: str, date_to: str):
+    """
+    Get daily breakdown of comments created and blocked within a date range.
+    :param request: request object
+    :param date_from: start date in YYYY-MM-DD format
+    :param date_to: end date in YYYY-MM-DD format
+    :return: list of daily breakdown data
+    """
+    if date_from > date_to:
+        return 400, {"message": "date_from must be earlier than date_to"}
+
+    daily_comments = Comment.objects.filter(
+        created_at__date__gte=date_from, created_at__date__lte=date_to
+    ).values('created_at__date').annotate(
+        total_comments=Count('id'),
+        blocked_comments=Count('id', filter=Q(is_blocked=True))
+    ).order_by('created_at__date')
+
+    # Convert to schema format
+    result = [
+        CommentAnalyticsSchema(
+            date=item['created_at__date'],
+            total_comments=item['total_comments'],
+            blocked_comments=item['blocked_comments']
+        ) for item in daily_comments
+    ]
+
+    return 200, result
 
 @router.post("/",
              response={201: CommentOutSchema, 400: ErrorSchema, 404: ErrorSchema, 500: ErrorSchema},

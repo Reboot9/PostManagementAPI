@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import List, Optional
 
 from ninja import Schema
@@ -14,7 +14,7 @@ class ReplySchema(Schema):
 class CommentInSchema(Schema):
     text: str
     # optional because it's required only when creating comment, not updating
-    post_id: Optional[int] = None
+    post_id: int = None
 
 
 class CommentOutSchema(Schema):
@@ -23,3 +23,9 @@ class CommentOutSchema(Schema):
     author_id: int
     replies: List[ReplySchema] = []
     created_at: datetime
+
+
+class CommentAnalyticsSchema(Schema):
+    date: date
+    total_comments: int
+    blocked_comments: int
