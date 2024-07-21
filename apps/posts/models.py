@@ -18,6 +18,10 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_blocked = models.BooleanField(default=False)
 
+    # Fields for automatic replies
+    auto_reply_enabled = models.BooleanField(default=False)
+    auto_reply_delay = models.PositiveIntegerField(default=0, help_text="Auto delay for comment in seconds")
+
     def __str__(self):
         return self.title
 

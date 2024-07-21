@@ -1,4 +1,3 @@
-from datetime import datetime, date
 from typing import List
 
 from django.contrib.auth import get_user_model
@@ -47,10 +46,12 @@ def daily_breakdown(request, date_from: str, date_to: str):
 
     return 200, result
 
+
 @router.post("/",
              response={201: CommentOutSchema, 400: ErrorSchema, 404: ErrorSchema, 500: ErrorSchema},
              auth=JWTBearer())
 def create_comment(request, comment_data: CommentInSchema):
+    from apps.comments.tasks import auto_reply_to_comment
     if not comment_data.post_id:
         return 400, {"message": "post_id is required when creating comment"}
     try:
@@ -65,6 +66,13 @@ def create_comment(request, comment_data: CommentInSchema):
             post=post,
             author=user,
         )
+
+        # Schedule auto-reply if enabled
+        if post.auto_reply_enabled and post.auto_reply_delay > 0:
+            auto_reply_to_comment.apply_async(
+                (comment.id,),
+                countdown=post.auto_reply_delay
+            )
 
         return 201, comment
     except Exception as e:

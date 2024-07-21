@@ -6,6 +6,8 @@ from ninja import Schema
 class PostInSchema(Schema):
     title: str
     content: str
+    auto_reply_enabled: bool = False
+    auto_reply_delay: int = 0
 
 
 class PostOutSchema(Schema):

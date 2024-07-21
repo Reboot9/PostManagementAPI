@@ -33,6 +33,8 @@ def create_post(request, post_data: PostInSchema):
             title=post_data.title,
             content=post_data.content,
             author=author,
+            auto_reply_enabled=post_data.auto_reply_enabled,
+            auto_reply_delay=post_data.auto_reply_delay,
         )
 
         return 201, post

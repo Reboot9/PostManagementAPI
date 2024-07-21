@@ -21,7 +21,7 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('title', 'content')
         }),
         ('Author and Status', {
-            'fields': ('author', 'is_blocked')
+            'fields': ('author', 'is_blocked', 'auto_reply_enabled', 'auto_reply_delay',)
         }),
         ('Timestamps', {
             'fields': ('created_at', 'updated_at'),
