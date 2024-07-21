@@ -85,7 +85,7 @@ def update_post(request, pk: int, post_data: PostInSchema):
     user = request.auth
 
     # Check if the authenticated user is staff or the post's author
-    if not user.is_staff or post.author != user:
+    if post.author != user and not user.is_staff:
         return 403, {"message": "You do not have permission to update this post"}
 
     for attr, value in post_data.dict().items():
@@ -110,12 +110,12 @@ def delete_post(request, pk: int):
         user = request.auth
 
         # Check if the authenticated user is staff or the post's author
-        if not user.is_staff or post.author != user:
+        if post.author != user and not user.is_staff:
             return 403, {"message": "You do not have permission to delete this post"}
 
         post.is_blocked = True
         post.save()
-        return 204
+        return 204, None
     except Post.DoesNotExist:
         return 404, {"message": "No Post matches the given query"}
 
