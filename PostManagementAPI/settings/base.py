@@ -171,3 +171,8 @@ SECRET_KEY = "test_secret_key"
 REFRESH_TOKEN_SECRET_KEY = "test_refresh_token_secret_key"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 REFRESH_TOKEN_EXPIRE_DAYS = 30
+
+
+# Celery settings
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://127.0.0.1:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://127.0.0.1:6379/0")

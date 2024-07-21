@@ -16,6 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    command: ["./docker-entrypoint.sh"]
     env_file:
       - ./.env
     volumes:
@@ -43,6 +44,28 @@ services:
       - post_management_network
     depends_on:
       - web
+
+  redis:
+    image: redis:7.0-alpine
+    networks:
+      - post_management_network
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - .:/PostManagementAPI
+    command: ["celery", "-A", "PostManagementAPI", "worker", "--loglevel=info"]
+    networks:
+      - post_management_network
+    depends_on:
+#      - db
+#      - web
+      - redis
 
 volumes:
   static_volume:

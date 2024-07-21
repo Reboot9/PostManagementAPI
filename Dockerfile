@@ -25,12 +25,10 @@ WORKDIR /PostManagementAPI
 COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
 COPY --from=builder /builder /PostManagementAPI
 COPY --from=builder /usr/local/bin/gunicorn /usr/local/bin/gunicorn
+COPY --from=builder /usr/local/bin/celery /usr/local/bin/celery
 
 COPY wait-for-it.sh ./
 COPY docker-entrypoint.sh ./
 
 RUN chmod +x wait-for-it.sh
 RUN chmod +x docker-entrypoint.sh
-
-# Command to run server
-ENTRYPOINT ["./docker-entrypoint.sh"]
