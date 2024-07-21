@@ -48,6 +48,7 @@ DJANGO_APPS = [
 LOCAL_APPS = [
     "apps.users.apps.UsersConfig",
     "apps.posts.apps.PostsConfig",
+    "apps.comments.apps.CommentsConfig",
 ]
 
 # External packages or libraries.
