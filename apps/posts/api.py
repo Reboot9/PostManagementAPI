@@ -6,6 +6,8 @@ from ninja import Router
 from ninja.pagination import paginate, PageNumberPagination
 
 from PostManagementAPI.schemas.errors import ErrorSchema
+from apps.comments.models import Comment
+from apps.comments.schema import CommentOutSchema
 from apps.posts.models import Post
 from apps.posts.schema import PostOutSchema, PostInSchema
 from apps.users.auth import JWTBearer
@@ -117,3 +119,20 @@ def delete_post(request, pk: int):
     except Post.DoesNotExist:
         return 404, {"message": "No Post matches the given query"}
 
+
+@router.get("/{post_id}/comments", response={200: List[CommentOutSchema], 404: ErrorSchema})
+@paginate(PageNumberPagination)
+def get_post_comments(request, post_id: int):
+    """
+    Retrieve all comments related to a post.
+
+    :param request: request object
+    :param post_id: primary key of the post to retrieve comments for
+
+    :returns: 200: A list of comments related to the post.
+    404: If no post matching the given post_id is found.
+    """
+    post = get_object_or_404(Post, id=post_id)
+    comments = Comment.objects.filter(post=post, is_blocked=False).select_related('author')
+
+    return comments
